@@ -4,6 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
+// Test API
+Route::get('/test', function (Request $request) {
+    return response()->json(['message' => 'API works!']);
+});
+
 // Current user (protected)
 Route::get('/user', function (Request $request) {
     return $request->user();
