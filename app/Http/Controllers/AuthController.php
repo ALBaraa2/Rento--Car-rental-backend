@@ -52,7 +52,10 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return (new UserResource($user))->additional(['token' => $token])->response()->setStatusCode(201);
+        return (new UserResource($user))->additional(['token' => $token,
+        'token_type' => 'Bearer',
+        'expires_at' => now()->addHours(1)->toISOString()])
+        ->response()->setStatusCode(201);
     }
 
     public function registerAgency(Request $request)
@@ -91,7 +94,10 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return (new UserResource($user))->additional(['token' => $token])->response()->setStatusCode(201);
+        return (new UserResource($user))->additional(['token' => $token,
+        'token_type' => 'Bearer',
+        'expires_at' => now()->addHours(1)->toISOString()])
+        ->response()->setStatusCode(201);
     }
 
     public function login(Request $request)
@@ -116,7 +122,10 @@ class AuthController extends Controller
         $user->tokens()->delete();
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return (new UserResource($user))->additional(['token' => $token])->response()->setStatusCode(201);
+        return (new UserResource($user))->additional(['token' => $token,
+        'token_type' => 'Bearer',
+        'expires_at' => now()->addHours(1)->toISOString()])
+        ->response()->setStatusCode(201);
     }
 
     public function logout(Request $request)
