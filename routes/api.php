@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Customer\HomeController as CustomerHomeController;
 
 // Test API
 Route::get('/test', function (Request $request) {
@@ -20,3 +21,5 @@ Route::post('/register/agency', [AuthController::class, 'registerAgency']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/refresh-token', [AuthController::class, 'refresh'])->middleware('auth:sanctum');
+
+Route::apiResource('/customer', CustomerHomeController::class)->middleware('auth:sanctum');

@@ -24,12 +24,52 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'phone' => $this->faker->phoneNumber(),
+            'password' => Hash::make('password'),
+            'address' => $this->faker->address(),
+            'profile_photo_path' => null,
+            'role' => $this->faker->randomElement(['admin', 'customer', 'agency']),
             'remember_token' => Str::random(10),
+            'email_verified_at' => now(),
+            'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];
+    }
+
+    public function admin()
+    {
+        return $this->state([
+            'role' => 'admin',
+            'is_active' => true,
+            'is_approved' => true,
+        ]);
+    }
+
+    public function customer()
+    {
+        return $this->state([
+            'role' => 'customer',
+            'is_active' => true,
+            'is_approved' => true,
+        ]);
+    }
+
+    public function agency()
+    {
+        return $this->state([
+            'role' => 'agency',
+            'is_active' => true,
+            'is_approved' => true,
+        ]);
+    }
+
+    public function unapproved()
+    {
+        return $this->state([
+            'is_approved' => false,
+        ]);
     }
 
     /**
