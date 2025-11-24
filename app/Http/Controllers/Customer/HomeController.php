@@ -13,13 +13,16 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        // Get all cars with their models
         $featuredCars = Car::featured()->get();
         $bestCars = Car::with('agency.user')->bestRated()->take(5)->get();
-        // $cars = Cars::with('model', 'model.brand', 'agency')->orderBy('created_at', 'desc')->first();
+        $mostBookedBrands = Car::with('model.brand')->mostBookedBrandName();
+        $mostBookedCars = Car::with('model.brand')->mostBooked()->get();
+
         return response()->json([
             'featuredCars' => $featuredCars,
             'bestCars' => $bestCars,
+            'mostBookedBrands' => $mostBookedBrands,
+            'mostBookedCars' => $mostBookedCars,
         ]);
     }
 

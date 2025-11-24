@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class Car extends Model
 {
@@ -56,6 +57,24 @@ class Car extends Model
         return $query->whereHas('bookings', function (Builder $q) {
                         $q->where('status', 'confirmed');
                     });
+    }
+
+    public function scopeMostBooked($query): Builder
+    {
+        return $query->confirmedBooking()->withCount('bookings')
+                    ->orderByDesc('bookings_count');
+    }
+
+    public function scopeMostBookedBrandName(Builder $query)
+    {
+        return $query->join('models', 'cars.model_id', '=', 'models.id')
+                    ->join('brands', 'models.brand_id', '=', 'brands.id')
+                    ->join('bookings', 'bookings.car_id', '=', 'cars.id')
+                    ->where('bookings.status', 'confirmed')
+                    ->select('brands.id', 'brands.name', DB::raw('COUNT(bookings.id) as total_bookings'))
+                    ->groupBy('brands.id', 'brands.name')
+                    ->orderByDesc('total_bookings')
+                    ->pluck('name');
     }
 
     public function scopeBestRated($query): Builder
