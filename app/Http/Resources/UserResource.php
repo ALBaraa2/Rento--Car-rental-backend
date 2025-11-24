@@ -24,9 +24,6 @@ class UserResource extends JsonResource
             'is_approved' => $this->is_approved,
             'profile_photo_path' => $this->profile_photo_path,
             'address' => $this->address,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'deleted_at' => $this->deleted_at,
         ];
     }
 }

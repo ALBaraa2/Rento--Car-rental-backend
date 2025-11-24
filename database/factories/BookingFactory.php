@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Customer;
-use App\Models\Cars;
+use App\Models\Car;
 use App\Models\Booking;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,7 +23,7 @@ class BookingFactory extends Factory
 
         return [
             'customer_id' => Customer::inRandomOrder()->first()->id ?? 1,
-            'car_id' => Cars::inRandomOrder()->first()->id ?? 1,
+            'car_id' => Car::inRandomOrder()->first()->id ?? 1,
             'start_date' => $startDate,
             'end_date' => $endDate,
             'start_time' => $this->faker->time(),

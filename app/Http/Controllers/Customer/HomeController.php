@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Cars;
+use App\Models\Car;
 
 class HomeController extends Controller
 {
@@ -14,9 +14,13 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         // Get all cars with their models
-        $cars = Cars::with('model', 'model.brand', 'agency')->orderBy('created_at', 'desc')->first();
-        // dd($cars);
-        return response()->json($cars);
+        $featuredCars = Car::featured()->get();
+        $bestCars = Car::with('agency.user')->bestRated()->take(5)->get();
+        // $cars = Cars::with('model', 'model.brand', 'agency')->orderBy('created_at', 'desc')->first();
+        return response()->json([
+            'featuredCars' => $featuredCars,
+            'bestCars' => $bestCars,
+        ]);
     }
 
     /**

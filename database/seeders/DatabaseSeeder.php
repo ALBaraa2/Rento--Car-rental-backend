@@ -7,7 +7,7 @@ use App\Models\Brands;
 use App\Models\Models;
 use App\Models\Customer;
 use App\Models\Agency;
-use App\Models\Cars;
+use App\Models\Car;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\Review;
@@ -60,9 +60,9 @@ class DatabaseSeeder extends Seeder
         }
 
         // 8. إنشاء السيارات (ترتبط بالوكالات العشوائية)
-        // أولاً نحتاج لإضافة agency_id لجدول cars
+        // أولاً نحتاج لإضافة agency_id لجدول car
         $agencies = Agency::all();
-        Cars::factory()->count(15)->create()->each(function ($car) use ($agencies) {
+        Car::factory()->count(15)->create()->each(function ($car) use ($agencies) {
             // إضافة agency_id للسيارة
             $car->update([
                 'agency_id' => $agencies->random()->id,

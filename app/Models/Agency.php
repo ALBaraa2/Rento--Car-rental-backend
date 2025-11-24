@@ -23,6 +23,6 @@ class Agency extends Model
 
     public function cars(): HasMany
     {
-        return $this->hasMany(Cars::class);
+        return $this->hasMany(Car::class);
     }
 }

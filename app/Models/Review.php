@@ -10,10 +10,15 @@ class Review extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'booking_id',
+        'car_id',
         'review',
         'rating',
     ];
+
+    public function car(): BelongsTo
+    {
+        return $this->belongsTo(Car::class);
+    }
 
     public function booking(): BelongsTo
     {

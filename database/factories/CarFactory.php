@@ -7,9 +7,9 @@ use App\Models\Models;
 use App\Models\Agency;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Cars>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Car>
  */
-class CarsFactory extends Factory
+class CarFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -22,12 +22,13 @@ class CarsFactory extends Factory
             'agency_id' => Agency::inRandomOrder()->first()->id ?? 1,
             'model_id' => Models::inRandomOrder()->first()->id ?? 1,
             'registration_number' => strtoupper($this->faker->bothify('???-####')),
-            'price_per_day' => $this->faker->numberBetween(30, 200),
+            'price_per_hour' => $this->faker->numberBetween(30, 200),
             'status' => $this->faker->randomElement(['available', 'maintenance']),
             'description' => $this->faker->sentence(10),
             'images_paths' => json_encode(['cars/car' . $this->faker->numberBetween(1, 10) . '.jpg']),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'is_featured' => $this->faker->boolean(),
         ];
     }
 
