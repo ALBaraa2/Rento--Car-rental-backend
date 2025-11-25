@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('brand_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('year')->nullable();
-            $table->string('type')->nullable();
+            $table->enum('type', ['باص', 'سيارة', 'دراجة نارية'])->default('سيارة');
             $table->string('color')->nullable();
             $table->string('fuel_type')->nullable();
             $table->string('seats')->nullable();
