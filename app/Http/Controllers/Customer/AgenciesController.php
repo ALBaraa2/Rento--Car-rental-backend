@@ -27,7 +27,14 @@ class AgenciesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $agency = Agency::with(['user'])->find($id);
+        if (!$agency) {
+            return response()->json(['message' => 'Agency not found'], 404);
+        }
+        return response()->json([
+            'success' => true,
+            'agency' => new AgencyResource($agency)
+        ]);
     }
 
     /**
