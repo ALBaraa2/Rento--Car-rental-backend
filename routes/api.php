@@ -24,6 +24,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::post('/refresh-token', [AuthController::class, 'refresh'])->middleware('auth:sanctum');
 
 Route::prefix('customer')->middleware('auth:sanctum')->group(function () {
-    Route::get('/', [CustomerHomeController::class, 'index']);
+    Route::get('/home', [CustomerHomeController::class, 'index']);
     Route::apiResource('/agencies', CustomerAgenciesController::class);
 });

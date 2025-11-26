@@ -19,7 +19,6 @@ class HomeController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Welcome to Rento',
             'featuredCars' => $featuredCars,
             'bestCars' => $bestCars,
             'mostBookedBrands' => $mostBookedBrands,
