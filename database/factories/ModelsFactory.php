@@ -25,7 +25,7 @@ class ModelsFactory extends Factory
             'brand_id' => Brands::where('name', $brandName)->first()->id ?? 1,
             'name' => $modelName,
             'year' => $this->faker->numberBetween(2018, 2024),
-            'type' => $this->faker->randomElement(['sedan', 'suv', 'hatchback', 'coupe', 'convertible']),
+            'type' => $this->faker->randomElement(['باص', 'سيارة', 'دراجة نارية']),
             'color' => $this->faker->colorName(),
             'fuel_type' => $this->faker->randomElement(['petrol', 'diesel', 'electric', 'hybrid']),
             'seats' => $this->faker->numberBetween(2, 8),

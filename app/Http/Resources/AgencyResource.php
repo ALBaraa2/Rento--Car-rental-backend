@@ -20,7 +20,7 @@ class AgencyResource extends JsonResource
                 'user_id' => $this->user_id,
                 'commercial_register' => $this->commercial_register,
                 'contact_email' => $this->contact_email,
-                'user_name' => $this->user->name,
+                'agency_name' => $this->user->name,
             ];
         } else if (Auth::user()->role == 'customer') {
             return [

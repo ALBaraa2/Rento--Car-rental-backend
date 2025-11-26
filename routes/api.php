@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Customer\HomeController as CustomerHomeController;
 use App\Http\Controllers\Customer\AgenciesController as CustomerAgenciesController;
+use App\Http\Controllers\Customer\CarsController as CustomerCarsController;
 
 // Test API
 Route::get('/test', function (Request $request) {
@@ -26,4 +27,5 @@ Route::post('/refresh-token', [AuthController::class, 'refresh'])->middleware('a
 Route::prefix('customer')->middleware('auth:sanctum')->group(function () {
     Route::get('/home', [CustomerHomeController::class, 'index']);
     Route::apiResource('/agencies', CustomerAgenciesController::class);
+    Route::get('/agencies/{id}/cars', [CustomerCarsController::class, 'agenciesCars']);
 });

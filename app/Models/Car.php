@@ -89,4 +89,25 @@ class Car extends Model
     {
         return $query->withCount('reviews');
     }
+
+    // public function scopeByAgencyBestRated(Builder $query, $agencyId): Builder
+    // {
+    //     return $query
+    //         ->where('agency_id', $agencyId)
+    //         ->leftJoin('reviews as r', 'r.car_id', '=', 'cars.id')
+    //         ->select(
+    //             'cars.*',
+    //             DB::raw('AVG(r.rating) as average_rating')
+    //         )
+    //         ->groupBy('cars.id')
+    //         ->orderByDesc('average_rating');
+    // }
+
+    public function scopeByAgencyBestRated(Builder $query, $agencyId): Builder
+    {
+        return $query
+            ->where('agency_id', $agencyId)
+            ->withAvg('reviews as average_rating', 'rating')
+            ->orderByRaw('average_rating DESC NULLS LAST');
+    }
 }
