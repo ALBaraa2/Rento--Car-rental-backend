@@ -27,7 +27,8 @@ class CarResource extends JsonResource
                 'description' => $this->description,
                 'image' => $this->images_paths ? asset('storage/' . $this->images_paths) : null,
                 'is_featured' => $this->is_featured,
-                'rating' => $this->average_rating,
+                'rating' => round($this->reviews_avg_rating, 2),
+                'reviews_count' => $this->reviews_count,
             ];
         }
         return [];

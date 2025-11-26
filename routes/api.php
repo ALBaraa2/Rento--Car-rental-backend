@@ -28,4 +28,5 @@ Route::prefix('customer')->middleware('auth:sanctum')->group(function () {
     Route::get('/home', [CustomerHomeController::class, 'index']);
     Route::apiResource('/agencies', CustomerAgenciesController::class);
     Route::get('/agencies/{id}/cars', [CustomerCarsController::class, 'agenciesCars']);
+    Route::get('/cars/{id}', [CustomerCarsController::class, 'show']);
 });
