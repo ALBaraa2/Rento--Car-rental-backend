@@ -14,7 +14,7 @@ class AgenciesController extends Controller
      */
     public function index()
     {
-        $agencies = Agency::with(['user'])->get();
+        $agencies = Agency::with(['user'])->activeAgencies()->approvedAgencies()->get();
         return response()->json([
             'success' => true,
             'count' => $agencies->count(),
@@ -27,29 +27,36 @@ class AgenciesController extends Controller
      */
     public function show(string $id)
     {
-        $agency = Agency::with(['user'])->find($id);
-        if (!$agency) {
-            return response()->json(['message' => 'Agency not found'], 404);
+        $agency = Agency::with(['user'])->findOrFail($id);
+
+        if (!$agency->isActive() || !$agency->isApproved()) {
+            return response()->json(['message' => 'Agency not Found'], 404);
         }
+
         return response()->json([
             'success' => true,
             'agency' => new AgencyResource($agency)
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function searchAboutAgency(Request $request)
     {
-        //
-    }
+        $name = $request->input('name');
+        $Address = $request->input('address');
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $agencies = Agency::with(['user'])->where('is_active', true)->where('is_approved', true)
+            ->when($name, function ($query) use ($name) {
+                $query->where('name', 'ilike', '%' . $name . '%');
+            })
+            ->when($Address, function ($query) use ($Address) {
+                $query->where('address', 'ilike', '%' . $Address . '%');
+            })
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'count' => $agencies->count(),
+            'agencies' => AgencyResource::collection($agencies)
+        ]);
     }
 }

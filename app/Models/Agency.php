@@ -25,4 +25,28 @@ class Agency extends Model
     {
         return $this->hasMany(Car::class);
     }
+
+    public function isActive(): bool
+    {
+        return $this->user->is_active;
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->user->is_approved;
+    }
+
+    public function scopeActiveAgencies($query)
+    {
+        return $query->whereHas('user', function ($q) {
+            $q->where('is_active', true);
+        });
+    }
+
+    public function scopeApprovedAgencies($query)
+    {
+        return $query->whereHas('user', function ($q) {
+            $q->where('is_approved', true);
+        });
+    }
 }

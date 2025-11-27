@@ -26,10 +26,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::post('/refresh-token', [AuthController::class, 'refresh'])->middleware('auth:sanctum');
 
 Route::prefix('customer')->middleware('auth:sanctum')->group(function () {
-    Route::get('/profile', [CustomerProfileController::class, 'profile']);
+    Route::get('/profile', [CustomerProfileController::class, 'profile'])->name('customer.profile');
     Route::post('/profile', [CustomerProfileController::class, 'update']);
-    Route::get('/home', [CustomerHomeController::class, 'index']);
-    Route::apiResource('/agencies', CustomerAgenciesController::class);
-    Route::get('/agencies/{id}/cars', [CustomerCarsController::class, 'agenciesCars']);
-    Route::get('/cars/{id}', [CustomerCarsController::class, 'show']);
+    Route::get('/home', [CustomerHomeController::class, 'index'])->name('customer.home');
+    Route::apiResource('/agencies', CustomerAgenciesController::class)->except('store', 'update', 'destroy');
+    Route::get('/agencies/{id}/cars', [CustomerCarsController::class, 'agencyCars'])->name('agency.cars');
+    Route::get('/cars/{id}', [CustomerCarsController::class, 'show'])->name('car.details');
 });

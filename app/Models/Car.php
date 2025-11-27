@@ -94,6 +94,9 @@ class Car extends Model
     {
         return $query
             ->where('agency_id', $agencyId)
+            ->whereHas('agency.user', function ($q) {
+                $q->where('is_active', true)->where('is_approved', true);
+            })
             ->withAvg('reviews as reviews_avg_rating', 'rating')
             ->orderByRaw('reviews_avg_rating DESC NULLS LAST');
     }

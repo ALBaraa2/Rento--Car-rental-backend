@@ -3,30 +3,28 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AgencyResource;
 use App\Models\Agency;
 use App\Models\Car;
 use App\Http\Resources\CarResource;
-use App\Models\Booking;
 
 class CarsController extends Controller
 {
-    public function agenciesCars(string $id)
+    public function agencyCars(string $id)
     {
-        $agency = Agency::find($id);
+        $agency = Agency::with('user')->findOrFail($id);
 
-        if (!$agency) {
-            return response()->json(['message' => 'Agency not found'], 404);
+        if (!$agency->isActive() || !$agency->isApproved()) {
+            return response()->json(['message' => 'Agency not Found'], 404);
         }
 
-        $agenciesCars = Car::with(['reviews', 'model.brand'])->byAgencyBestRated($id)->get();
+        $agencyCars = Car::with(['reviews', 'model.brand', 'agency.user'])->byAgencyBestRated($id)->get();
 
         return response()->json([
             'success' => true,
             'agency_name' => $agency->user->name,
             'agency_id' => $agency->id,
             'agency_adderss' => $agency->user->address,
-            'agenciesCars' => $agenciesCars->map(function ($car) {
+            'agencyCars' => $agencyCars->map(function ($car) {
                 return [
                     'id' => $car->id,
                     'brand' => $car->model->brand->name ?? null,
