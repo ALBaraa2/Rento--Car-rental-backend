@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Customer\HomeController as CustomerHomeController;
 use App\Http\Controllers\Customer\AgenciesController as CustomerAgenciesController;
 use App\Http\Controllers\Customer\CarsController as CustomerCarsController;
+use App\Http\Controllers\Customer\ProfileController as CustomerProfileController;
 
 // Test API
 Route::get('/test', function (Request $request) {
@@ -25,6 +26,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::post('/refresh-token', [AuthController::class, 'refresh'])->middleware('auth:sanctum');
 
 Route::prefix('customer')->middleware('auth:sanctum')->group(function () {
+    Route::get('/profile', [CustomerProfileController::class, 'profile']);
+    Route::post('/profile', [CustomerProfileController::class, 'update']);
     Route::get('/home', [CustomerHomeController::class, 'index']);
     Route::apiResource('/agencies', CustomerAgenciesController::class);
     Route::get('/agencies/{id}/cars', [CustomerCarsController::class, 'agenciesCars']);
