@@ -39,17 +39,21 @@ class AgenciesController extends Controller
         ]);
     }
 
-    public function searchAboutAgency(Request $request)
+    public function search(Request $request)
     {
         $name = $request->input('name');
         $Address = $request->input('address');
 
-        $agencies = Agency::with(['user'])->where('is_active', true)->where('is_approved', true)
+        $agencies = Agency::with(['user'])->activeAgencies()->approvedAgencies()
             ->when($name, function ($query) use ($name) {
-                $query->where('name', 'ilike', '%' . $name . '%');
+                $query->whereHas('user', function ($q) use ($name) {
+                    $q->where('name', 'ilike', '%' . $name . '%');
+                });
             })
             ->when($Address, function ($query) use ($Address) {
-                $query->where('address', 'ilike', '%' . $Address . '%');
+                $query->whereHas('user', function ($q) use ($Address) {
+                    $q->where('address', 'ilike', '%' . $Address . '%');
+                });
             })
             ->get();
 

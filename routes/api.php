@@ -25,10 +25,11 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/refresh-token', [AuthController::class, 'refresh'])->middleware('auth:sanctum');
 
-Route::prefix('customer')->middleware('auth:sanctum')->group(function () {
-    Route::get('/profile', [CustomerProfileController::class, 'profile'])->name('customer.profile');
+Route::prefix('customer')->middleware('auth:sanctum')->name('customer.')->group(function () {
+    Route::get('/profile', [CustomerProfileController::class, 'profile'])->name('profile');
     Route::post('/profile', [CustomerProfileController::class, 'update']);
-    Route::get('/home', [CustomerHomeController::class, 'index'])->name('customer.home');
+    Route::get('/home', [CustomerHomeController::class, 'index'])->name('home');
+    Route::get('agencies/search', [CustomerAgenciesController::class, 'search'])->name('agencies.search');
     Route::apiResource('/agencies', CustomerAgenciesController::class)->except('store', 'update', 'destroy');
     Route::get('/agencies/{id}/cars', [CustomerCarsController::class, 'agencyCars'])->name('agency.cars');
     Route::get('/cars/{id}', [CustomerCarsController::class, 'show'])->name('car.details');
