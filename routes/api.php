@@ -29,6 +29,7 @@ Route::prefix('customer')->middleware('auth:sanctum')->name('customer.')->group(
     Route::get('/profile', [CustomerProfileController::class, 'profile'])->name('profile');
     Route::post('/profile', [CustomerProfileController::class, 'update']);
     Route::get('/home', [CustomerHomeController::class, 'index'])->name('home');
+    Route::get('/home/search', [CustomerHomeController::class, 'search'])->name('home.search');
     Route::get('agencies/search', [CustomerAgenciesController::class, 'search'])->name('agencies.search');
     Route::apiResource('/agencies', CustomerAgenciesController::class)->except('store', 'update', 'destroy');
     Route::get('/agencies/{id}/cars', [CustomerCarsController::class, 'agencyCars'])->name('agency.cars');

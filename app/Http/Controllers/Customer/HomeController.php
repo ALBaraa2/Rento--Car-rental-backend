@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agency;
 use Illuminate\Http\Request;
 use App\Models\Car;
 
@@ -25,35 +26,46 @@ class HomeController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function search(Request $request)
     {
-        //
-    }
+        $model = $request->input('model');
+        $brand = $request->input('brand');
+        $type = $request->input('type');
+        $min_price = $request->input('min_price');
+        $max_price = $request->input('max_price');
+        $rating = $request->input('rating');
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $cars = Car::with(['agency.user', 'model.brand', 'reviews'])->Available()->withAvg('reviews as avarage_rating', 'rating')
+            ->when($model, function ($query) use ($model) {
+                $query->whereHas('model', function ($q) use ($model) {
+                    $q->where('name', 'ilike', '%' . $model . '%');
+                });
+            })
+            ->when($brand, function ($query) use ($brand) {
+                $query->whereHas('model.brand', function ($q) use ($brand) {
+                    $q->where('name', 'ilike', '%' . $brand . '%');
+                });
+            })
+            ->when($type, function ($query) use ($type) {
+                $query->whereHas('model', function ($q) use ($type) {
+                    $q->where('type', 'ilike', '%' . $type . '%');
+                });
+            })
+            ->when($rating, function ($query) use ($rating) {
+                $query->whereRaw('(select avg(rating) from reviews where reviews.car_id = cars.id) >= ?', [$rating]);
+            })
+            ->when($min_price, function ($query) use ($min_price) {
+                $query->where('price_per_hour', '>=', $min_price);
+            })
+            ->when($max_price, function ($query) use ($max_price) {
+                $query->where('price_per_hour', '<=', $max_price);
+            })
+            ->get();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'count' => $cars->count(),
+            'cars' => $cars
+        ]);
     }
 }

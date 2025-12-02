@@ -66,7 +66,7 @@ class CarsController extends Controller
             return response()->json(['message' => 'Agency not Found'], 404);
         }
 
-        $cars = Car::with(['agency.user', 'model.brand', 'reviews'])->where('agency_id', $id)->Available()
+        $cars = Car::with(['agency.user', 'model.brand', 'reviews'])->where('agency_id', $id)->Available()->withAvg('reviews as avarage_rating', 'rating')
             ->when($model, function ($query) use ($model) {
                 $query->whereHas('model', function ($q) use ($model) {
                     $q->where('name', 'ilike', '%' . $model . '%');
