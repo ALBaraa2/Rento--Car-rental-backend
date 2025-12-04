@@ -7,6 +7,8 @@ use App\Http\Controllers\Customer\HomeController as CustomerHomeController;
 use App\Http\Controllers\Customer\AgenciesController as CustomerAgenciesController;
 use App\Http\Controllers\Customer\CarsController as CustomerCarsController;
 use App\Http\Controllers\Customer\ProfileController as CustomerProfileController;
+use App\Http\Resources\CustomerResource;
+use App\Http\Resources\UserResource;
 
 // Test API
 Route::get('/test', function (Request $request) {
@@ -27,7 +29,13 @@ Route::post('/refresh-token', [AuthController::class, 'refresh'])->middleware('a
 
 Route::prefix('customer')->middleware('auth:sanctum')->name('customer.')->group(function () {
     Route::get('/profile', [CustomerProfileController::class, 'profile'])->name('profile');
-    Route::post('/profile', [CustomerProfileController::class, 'update']);
+    Route::get('/profile/update', function (Request $request) {
+        return response()->json([
+            'success' => true,
+            'user' => new CustomerResource($request->user())
+        ]);
+    })->name('profile.update');
+    Route::put('/profile', [CustomerProfileController::class, 'update']);
     Route::get('/home', [CustomerHomeController::class, 'index'])->name('home');
     Route::get('/home/search', [CustomerHomeController::class, 'search'])->name('home.search');
     Route::get('agencies/search', [CustomerAgenciesController::class, 'search'])->name('agencies.search');

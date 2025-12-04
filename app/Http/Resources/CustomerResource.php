@@ -22,6 +22,7 @@ class CustomerResource extends JsonResource
                 'phone' => $this->user->phone,
                 'is_approved' => $this->user->is_approved,
                 'profile_image' => $this->user->profile_photo_path ? asset('storage/' . $this->user->profile_photo_path) : null,
+                'driving_license' => $this->driving_license ? asset('storage/' . $this->driving_license) : null,
             ];
     }
 }
