@@ -44,6 +44,7 @@ Route::prefix('customer')->middleware('auth:sanctum')->name('customer.')->group(
     Route::get('/agencies/{id}/cars', [CustomerCarsController::class, 'agencyCars'])->name('agency.cars');
     Route::get('/agencies/{id}/cars/search', [CustomerCarsController::class, 'search'])->name('agencies.cars.search');
     Route::get('/cars/{id}', [CustomerCarsController::class, 'show'])->name('car.details');
+    Route::get('/cars/{id}/book', [CustomerCarsController::class, 'book'])->name('car.book');
 });
 
 Route::prefix('agency')->middleware('auth:sanctum')->name('agency.')->group(function () {

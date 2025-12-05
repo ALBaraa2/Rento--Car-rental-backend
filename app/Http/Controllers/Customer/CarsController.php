@@ -7,6 +7,7 @@ use App\Models\Agency;
 use App\Models\Car;
 use App\Http\Resources\CarResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class CarsController extends Controller
 {
@@ -97,6 +98,72 @@ class CarsController extends Controller
             'success' => true,
             'count' => $cars->count(),
             'cars' => $cars
+        ]);
+    }
+
+    public function book($id, Request $request)
+    {
+        $car = Car::Available()->find($id);
+
+        if (!$car) {
+            return response()->json(['message' => 'Car not available'], 404);
+        }
+
+        $validated = $request->validate([
+            'start_date' =>'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'start_time'=> 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time',
+        ]);
+
+        $start = Carbon::parse($validated['start_date'] . ' ' . $validated['start_time']);
+        $end = Carbon::parse($validated['end_date'] . ' ' . $validated['end_time']);
+
+
+        if ($end->lessThanOrEqualTo($start)) {
+            return response()->json(['message' => 'End datetime must be after start datetime'], 422);
+        }
+
+        $conflict = $car->bookings()
+        ->where(function($q) use ($start, $end) {
+            $q->where(function($query) use ($start, $end) {
+                $query->where('start_date', '<=', $end->toDateString())
+                    ->where('end_date', '>=', $start->toDateString());
+            })
+            ->where(function($query) use ($start, $end) {
+                $query->where(function($t) use ($start, $end) {
+                    if ($start->toDateString() === $end->toDateString()) {
+                        $t->where('start_time', '<', $end->format('H:i'))
+                        ->where('end_time', '>', $start->format('H:i'));
+                    }
+                });
+            });
+        })
+        ->exists();
+
+        if ($conflict) {
+            return response()->json(['message' => 'Car is already booked for the selected period'], 409);
+        }
+
+        $hours = $start->diffInHours($end);
+        $total_price = $car->price_per_hour * $hours;
+
+        $booking = $car->bookings()->create([
+            'customer_id' => $request->user()->customer->id,
+            'car_id' => $car->id,
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'start_time' => $validated['start_time'],
+            'end_time' => $validated['end_time'],
+            'status' => 'pending',
+            'total_price' => $total_price,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Car booked successfully',
+            'booking_id' => $booking->id,
+            'total_price' => $total_price
         ]);
     }
 }

@@ -28,7 +28,7 @@ class AgencyResource extends JsonResource
             return [
                 'id' => $this->id,
                 'agency_name' => $this->user->name,
-                'email' => $this->user->email,
+                'contact_email' => $this->contact_email,
                 'phone' => $this->user->phone,
                 'profile_image' => $this->user->profile_photo_path ? asset('storage/' . $this->user->profile_photo_path) : null,
                 'address' => $this->user->address,
