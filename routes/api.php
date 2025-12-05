@@ -8,7 +8,8 @@ use App\Http\Controllers\Customer\AgenciesController as CustomerAgenciesControll
 use App\Http\Controllers\Customer\CarsController as CustomerCarsController;
 use App\Http\Controllers\Customer\ProfileController as CustomerProfileController;
 use App\Http\Resources\CustomerResource;
-use App\Http\Resources\UserResource;
+use App\Http\Controllers\Agency\ProfileController as AgencyProfileController;
+use App\Http\Resources\AgencyResource;
 
 // Test API
 Route::get('/test', function (Request $request) {
@@ -34,7 +35,7 @@ Route::prefix('customer')->middleware('auth:sanctum')->name('customer.')->group(
             'success' => true,
             'user' => new CustomerResource($request->user())
         ]);
-    })->name('profile.update');
+    })->name('show.profile.update');
     Route::put('/profile', [CustomerProfileController::class, 'update']);
     Route::get('/home', [CustomerHomeController::class, 'index'])->name('home');
     Route::get('/home/search', [CustomerHomeController::class, 'search'])->name('home.search');
@@ -43,4 +44,15 @@ Route::prefix('customer')->middleware('auth:sanctum')->name('customer.')->group(
     Route::get('/agencies/{id}/cars', [CustomerCarsController::class, 'agencyCars'])->name('agency.cars');
     Route::get('/agencies/{id}/cars/search', [CustomerCarsController::class, 'search'])->name('agencies.cars.search');
     Route::get('/cars/{id}', [CustomerCarsController::class, 'show'])->name('car.details');
+});
+
+Route::prefix('agency')->middleware('auth:sanctum')->name('agency.')->group(function () {
+    Route::get('/profile', [AgencyProfileController::class, 'profile'])->name('profile');
+    Route::get('/profile/update', function (Request $request) {
+        return response()->json([
+            'success' => true,
+            'agency' => new AgencyResource($request->user()->agency)
+        ]);
+    })->name('show.profile.update');
+    Route::put('/profile', [AgencyProfileController::class, 'update']);
 });

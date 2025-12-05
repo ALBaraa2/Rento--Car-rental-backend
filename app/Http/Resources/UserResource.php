@@ -15,7 +15,6 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        if (Auth::user()->role == 'customer') {
             return [
                 'id' => $this->id,
                 'name' => $this->name,
@@ -28,7 +27,5 @@ class UserResource extends JsonResource
                 'address' => $this->address,
                 'driving_license' => $this->driving_license ? asset('storage/' . $this->driving_license) : null,
             ];
-        }
-        return [];
     }
 }

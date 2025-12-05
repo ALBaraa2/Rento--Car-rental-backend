@@ -76,6 +76,11 @@ class AuthController extends Controller
             $validated['commercial_register'] = $path;
         }
 
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('profile_photos', 'public');
+            $validated['photo'] = $path;
+        }
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -83,6 +88,7 @@ class AuthController extends Controller
             'role' => 'agency',
             'phone' => $validated['phone'] ?? null,
             'address' => $validated['address'] ?? null,
+            'profile_photo_path' => $validated['photo'] ?? null,
             'is_approved' => false,
         ]);
 
