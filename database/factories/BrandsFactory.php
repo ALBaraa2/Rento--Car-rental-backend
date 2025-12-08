@@ -11,13 +11,27 @@ class BrandsFactory extends Factory
 
     public function definition(): array
     {
-        $brands = ['Toyota', 'Honda', 'Ford', 'BMW', 'Mercedes', 'Audi', 'Hyundai', 'Kia', 'Nissan', 'Chevrolet'];
+        $brands = [
+            ['name' => 'Toyota', 'country' => 'Japan'],
+            ['name' => 'Honda', 'country' => 'Japan'],
+            ['name' => 'Ford', 'country' => 'USA'],
+            ['name' => 'BMW', 'country' => 'Germany'],
+            ['name' => 'Mercedes', 'country' => 'Germany'],
+            ['name' => 'Audi', 'country' => 'Germany'],
+            ['name' => 'Hyundai', 'country' => 'South Korea'],
+            ['name' => 'Kia', 'country' => 'South Korea'],
+            ['name' => 'Nissan', 'country' => 'Japan'],
+            ['name' => 'Chevrolet', 'country' => 'USA'],
+        ];
+
+        $brand = $this->faker->randomElement($brands);
 
         return [
-            'name' => $this->faker->randomElement($brands),
-            'country' => $this->faker->country(),
-            'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
-            'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'name' => $brand['name'],
+            'country' => $brand['country'],
+            'type' => $this->faker->randomElement(['باص', 'سيارة', 'دراجة نارية']),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

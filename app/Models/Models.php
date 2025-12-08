@@ -14,12 +14,6 @@ class Models extends Model
         'brand_id',
         'name',
         'year',
-        'type',
-        'color',
-        'fuel_type',
-        'seats',
-        'doors',
-        'transmission',
     ];
 
     public function brand(): BelongsTo

@@ -15,8 +15,17 @@ return new class extends Migration
             $table->id();
             $table->foreignId('agency_id')->constrained()->onDelete('cascade');
             $table->foreignId('model_id')->constrained()->onDelete('cascade');
+
             $table->string('registration_number');
-            $table->string('price_per_hour');
+            $table->decimal('price_per_hour', 8, 2);
+
+
+            $table->string('color')->nullable();
+            $table->string('fuel_type')->nullable();
+            $table->unsignedTinyInteger('seats')->nullable();
+            $table->unsignedTinyInteger('doors')->nullable();
+            $table->string('transmission')->nullable();
+
             $table->enum('status', ['available', 'maintenance'])->default('available');
             $table->text('description')->nullable();
             $table->json('images_paths')->nullable();

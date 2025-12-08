@@ -10,6 +10,9 @@ use App\Http\Controllers\Customer\ProfileController as CustomerProfileController
 use App\Http\Resources\CustomerResource;
 use App\Http\Controllers\Agency\ProfileController as AgencyProfileController;
 use App\Http\Resources\AgencyResource;
+use App\Http\Controllers\Agency\HomeController as AgencyHomeController;
+use App\Http\Controllers\Agency\CarController as AgencyCarController;
+use Illuminate\Support\Facades\Auth;
 
 // Test API
 Route::get('/test', function (Request $request) {
@@ -33,7 +36,7 @@ Route::prefix('customer')->middleware('auth:sanctum')->name('customer.')->group(
     Route::get('/profile/update', function (Request $request) {
         return response()->json([
             'success' => true,
-            'user' => new CustomerResource($request->user())
+            'user' => new CustomerResource($request->user()->customer),
         ]);
     })->name('show.profile.update');
     Route::put('/profile', [CustomerProfileController::class, 'update']);
@@ -50,10 +53,19 @@ Route::prefix('customer')->middleware('auth:sanctum')->name('customer.')->group(
 Route::prefix('agency')->middleware('auth:sanctum')->name('agency.')->group(function () {
     Route::get('/profile', [AgencyProfileController::class, 'profile'])->name('profile');
     Route::get('/profile/update', function (Request $request) {
-        return response()->json([
-            'success' => true,
-            'agency' => new AgencyResource($request->user()->agency)
-        ]);
+        if (Auth::user()->role == 'agency') {
+            return response()->json([
+                'success' => true,
+                'agency' => new AgencyResource($request->user()->agency)
+            ]);
+        } else
+            return response()->json(['message' => 'unauthorized']);
     })->name('show.profile.update');
     Route::put('/profile', [AgencyProfileController::class, 'update']);
+    Route::get('/home', [AgencyHomeController::class, 'index'])->name('home');
+    Route::get('/cars', [AgencyCarController::class, 'index'])->name('cars');
+    Route::get('/cars/create', [AgencyCarController::class, 'create'])->name('cars.create');
+    Route::get('/cars/get/{id}', [AgencyCarController::class, 'show'])->name('cars.get');
+    Route::get('/cars/get/{id}', [AgencyCarController::class, 'show'])->name('cars.get');
 });
+

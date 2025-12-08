@@ -12,6 +12,7 @@ class Brands extends Model
     protected $fillable = [
         'name',
         'country',
+        'type',
     ];
 
     public function models(): HasMany

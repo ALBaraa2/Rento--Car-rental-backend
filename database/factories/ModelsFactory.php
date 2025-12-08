@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ModelsFactory extends Factory
 {
+    protected $model = Models::class;
+
     public function definition(): array
     {
         $models = [
@@ -21,18 +23,14 @@ class ModelsFactory extends Factory
         $brandName = $this->faker->randomElement(array_keys($models));
         $modelName = $this->faker->randomElement($models[$brandName]);
 
+        $brand = Brands::where('name', $brandName)->first();
+
         return [
-            'brand_id' => Brands::where('name', $brandName)->first()->id ?? 1,
+            'brand_id' => $brand?->id ?? Brands::inRandomOrder()->value('id') ?? 1,
             'name' => $modelName,
             'year' => $this->faker->numberBetween(2018, 2024),
-            'type' => $this->faker->randomElement(['باص', 'سيارة', 'دراجة نارية']),
-            'color' => $this->faker->colorName(),
-            'fuel_type' => $this->faker->randomElement(['petrol', 'diesel', 'electric', 'hybrid']),
-            'seats' => $this->faker->numberBetween(2, 8),
-            'doors' => $this->faker->numberBetween(2, 5),
-            'transmission' => $this->faker->randomElement(['automatic', 'manual']),
-            'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
-            'updated_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

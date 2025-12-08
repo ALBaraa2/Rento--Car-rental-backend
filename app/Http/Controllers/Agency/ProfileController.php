@@ -16,7 +16,12 @@ class ProfileController extends Controller
 
         $agency = Agency::with('user')->where("user_id", $user->id)->first();
 
+        if (!$agency || $user->role != 'agency') {
+            return response()->json(['mesasge' => 'unauthorized']);
+        }
+
         return response()->json([
+            'status' => '200',
             'success' => true,
             'agency' => new AgencyResource($agency),
         ]);
@@ -27,6 +32,10 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $agency = Agency::with('user')->where("user_id", $user->id)->first();
+
+        if (!$agency || $user->role != 'agency') {
+            return response()->json(['mesasge' => 'unauthorized']);
+        }
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',

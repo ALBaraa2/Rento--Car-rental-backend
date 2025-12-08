@@ -14,12 +14,23 @@ class Car extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'agency_id',
         'model_id',
         'registration_number',
         'price_per_hour',
+        'color',
+        'fuel_type',
+        'seats',
+        'doors',
+        'transmission',
         'status',
         'description',
         'images_paths',
+        'is_featured',
+    ];
+
+    protected $casts = [
+        'images_paths' => 'array',
     ];
 
     public function bookings(): HasMany

@@ -119,6 +119,11 @@ class CarsController extends Controller
         $start = Carbon::parse($validated['start_date'] . ' ' . $validated['start_time']);
         $end = Carbon::parse($validated['end_date'] . ' ' . $validated['end_time']);
 
+        if ($start->lt(Carbon::now()) || $end->lt(Carbon::now())) {
+            return response()->json([
+                'message' => 'You cannot make a booking for a date or time that has already passed. Please choose a future time.'
+            ], 422);
+        }
 
         if ($end->lessThanOrEqualTo($start)) {
             return response()->json(['message' => 'End datetime must be after start datetime'], 422);

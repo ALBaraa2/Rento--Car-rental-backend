@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->enum('type', ['باص', 'سيارة', 'دراجة نارية'])->default('سيارة');
             $table->string('country')->nullable();
             $table->timestamps();
             $table->softDeletes();
