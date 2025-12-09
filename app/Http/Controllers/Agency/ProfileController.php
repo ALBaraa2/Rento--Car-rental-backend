@@ -21,7 +21,6 @@ class ProfileController extends Controller
         }
 
         return response()->json([
-            'status' => '200',
             'success' => true,
             'agency' => new AgencyResource($agency),
         ]);
