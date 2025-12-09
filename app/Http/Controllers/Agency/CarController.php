@@ -27,6 +27,7 @@ class CarController extends Controller
 
         return response()->json([
             'success' => true,
+            'count' => $cars->count(),
             'cars' => $cars,
         ]);
     }
