@@ -47,7 +47,7 @@ class AuthController extends Controller
 
         Customer::create([
             'user_id' => $user->id,
-            'driving_license_path' => $validated['driving_license'] ?? null,
+            'driving_license' => $validated['driving_license'] ?? null,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
