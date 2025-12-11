@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
-{
+{ 
     public function profile()
     {
         $userId = Auth::user();
@@ -39,7 +39,6 @@ class ProfileController extends Controller
             $path = $request->file('photo')->store('profile_photos', 'public');
             $validated['photo'] = $path;
         }
-
         if ($request->hasFile('driving_license')) {
             $path = $request->file('driving_license')->store('driving_licenses', 'public');
             $validated['driving_license'] = $path;
