@@ -12,9 +12,9 @@ class ProfileController extends Controller
 {
     public function profile()
     {
-        $userId = Auth::user();
+        $user = Auth::user();
 
-        $customer = Customer::with('user')->findOrFail($userId);
+        $customer = Customer::with('user')->findOrFail($user->customer->id);
 
         return response()->json([
             'success' => true,

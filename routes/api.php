@@ -66,6 +66,4 @@ Route::prefix('agency')->middleware('auth:sanctum')->name('agency.')->group(func
     Route::get('/cars', [AgencyCarController::class, 'index'])->name('cars');
     Route::get('/cars/create', [AgencyCarController::class, 'create'])->name('cars.create');
     Route::get('/cars/get/{id}', [AgencyCarController::class, 'show'])->name('cars.get');
-    Route::get('/cars/get/{id}', [AgencyCarController::class, 'show'])->name('cars.get');
 });
-
