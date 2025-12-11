@@ -64,6 +64,11 @@ Route::prefix('agency')->middleware('auth:sanctum')->name('agency.')->group(func
     Route::put('/profile', [AgencyProfileController::class, 'update']);
     Route::get('/home', [AgencyHomeController::class, 'index'])->name('home');
     Route::get('/cars', [AgencyCarController::class, 'index'])->name('cars');
-    Route::get('/cars/create', [AgencyCarController::class, 'create'])->name('cars.create');
-    Route::get('/cars/get/{id}', [AgencyCarController::class, 'show'])->name('cars.get');
+    Route::get('/cars/create', [AgencyCarController::class, 'getTypes'])->name('cars.getTypes');
+    Route::get('/cars/get/{type}', [AgencyCarController::class, 'getBrandName'])->name('cars.get.brandsName');
+    Route::get('/cars/get/{type}/{brandId}', [AgencyCarController::class, 'getModels'])->name('cars.get.models');
+    Route::get('/cars/getTransmission', [AgencyCarController::class, 'getTransmission'])->name('cars.getTransmission');
+    Route::get('/cars/getColor', [AgencyCarController::class, 'getColor'])->name('cars.getColor');
+    Route::get('/cars/getFuelType', [AgencyCarController::class, 'getFuelType'])->name('cars.getFuelType');
+    Route::post('/cars/store', [AgencyCarController::class,'store'])->name('cars.store');
 });
