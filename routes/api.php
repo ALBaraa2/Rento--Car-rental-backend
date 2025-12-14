@@ -47,7 +47,9 @@ Route::prefix('customer')->middleware('auth:sanctum')->name('customer.')->group(
     Route::get('/agencies/{id}/cars', [CustomerCarsController::class, 'agencyCars'])->name('agency.cars');
     Route::get('/agencies/{id}/cars/search', [CustomerCarsController::class, 'search'])->name('agencies.cars.search');
     Route::get('/cars/{id}', [CustomerCarsController::class, 'show'])->name('car.details');
-    Route::get('/cars/{id}/book', [CustomerCarsController::class, 'book'])->name('car.book');
+    Route::post('/cars/{id}/book', [CustomerCarsController::class, 'book'])->name('car.book');
+    Route::get('/cars/book/details/{bookId}', [CustomerCarsController::class,'bookingDetails'])->name('car.booking.details');
+    Route::post('/cars/book/confirm/{bookId}', [CustomerCarsController::class,'confirmBooking'])->name('car.booking.confirm');
 });
 
 Route::prefix('agency')->middleware('auth:sanctum')->name('agency.')->group(function () {

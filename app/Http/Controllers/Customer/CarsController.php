@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Agency;
 use App\Models\Car;
 use App\Http\Resources\CarResource;
+use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class CarsController extends Controller
 {
@@ -103,6 +105,7 @@ class CarsController extends Controller
 
     public function book($id, Request $request)
     {
+        $customerId = Auth::user()->customer->id;
         $car = Car::Available()->find($id);
 
         if (!$car) {
@@ -154,7 +157,7 @@ class CarsController extends Controller
         $total_price = $car->price_per_hour * $hours;
 
         $booking = $car->bookings()->create([
-            'customer_id' => $request->user()->customer->id,
+            'customer_id' => $customerId,
             'car_id' => $car->id,
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
@@ -169,6 +172,53 @@ class CarsController extends Controller
             'message' => 'Car booked successfully',
             'booking_id' => $booking->id,
             'total_price' => $total_price
+        ]);
+    }
+
+    public function bookingDetails(Request $request)
+    {
+        $book = Booking::with(['car.model.brand', 'review'])->find($request->bookId);
+
+        if (!$book) {
+            return response()->json(['message'=> 'Book did not found'],404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'booking_id' => $book->id,
+            'customer_name' => $book->customer->user->name,
+            'car_model' => $book->car->model->name,
+            'car_brand' => $book->car->model->brand->name,
+            'car_description' => $book->car->description,
+            'start_date' => $book->start_date,
+            'end_date' => $book->end_date,
+            'start_time' => $book->start_time,
+            'end_time' => $book->end_time,
+            'total_price' => $book->total_price,
+            'service_fees' => 15,
+        ]);
+    }
+
+    public function confirmBooking($id)
+    {
+        $book = Booking::with('payment')->find($id);
+        $payment = $book->payment;
+
+        if (!$book) {
+            return response()->json(['message'=> 'Book did not found'],404);
+        }
+
+        if (!$payment || $payment->status != 'captured') {
+            return response()->json(['message'=> 'Payment did not found'],404);
+        }
+
+        $book->update([
+            'status' => 'confirmed',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Booking confirmed successfully',
         ]);
     }
 }

@@ -29,9 +29,9 @@ class Booking extends Model
         return $this->belongsTo(Car::class);
     }
 
-    public function reviews(): HasMany
+    public function review(): HasOne
     {
-        return $this->hasMany(Review::class);
+        return $this->hasOne(Review::class);
     }
 
     public function customer(): BelongsTo
