@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('agencies', function (Blueprint $table) {
-            $table->decimal('commercial_register_number',10,2)->default(0)->comment('commercial register number');
+            $table->string('commercial_register_number')->default('0')->comment('commercial register number');
             $table->dropColumn('contact_email');
         });
     }
@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('agencies', function (Blueprint $table) {
             $table->dropColumn('commercial_register_number');
-            $table->string('contact_email');
+            $table->string('contact_email')->default('')->comment('contact email');
         });
     }
 };

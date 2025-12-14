@@ -20,9 +20,9 @@ class AgencyResource extends JsonResource
                 'agency_name' => $this->user->name,
                 'email' => $this->user->email,
                 'phone' => $this->user->phone,
-                'contact_email' => $this->contact_email,
                 'commercial_register' => $this->commercial_register,
                 'profile_image' => $this->user->profile_photo_path ? asset('storage/' . $this->user->profile_photo_path) : null,
+                'commercial_register_number' => $this->commercial_register_number,
             ];
         } else if ($this->user->role == 'customer') {
             return [

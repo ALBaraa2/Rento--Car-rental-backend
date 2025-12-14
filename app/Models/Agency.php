@@ -13,7 +13,7 @@ class Agency extends Model
     protected $fillable = [
         'user_id',
         'commercial_register',
-        'contact_email',
+        'commercial_register_number',
     ];
 
     public function user(): BelongsTo
