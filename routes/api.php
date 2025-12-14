@@ -39,7 +39,7 @@ Route::prefix('customer')->middleware('auth:sanctum')->name('customer.')->group(
             'user' => new CustomerResource($request->user()->customer),
         ]);
     })->name('show.profile.update');
-    Route::put('/profile', [CustomerProfileController::class, 'update']);
+    Route::patch('/profile', [CustomerProfileController::class, 'update']);
     Route::get('/home', [CustomerHomeController::class, 'index'])->name('home');
     Route::get('/home/search', [CustomerHomeController::class, 'search'])->name('home.search');
     Route::get('agencies/search', [CustomerAgenciesController::class, 'search'])->name('agencies.search');
@@ -63,7 +63,7 @@ Route::prefix('agency')->middleware('auth:sanctum')->name('agency.')->group(func
         } else
             return response()->json(['message' => 'unauthorized']);
     })->name('show.profile.update');
-    Route::put('/profile', [AgencyProfileController::class, 'update']);
+    Route::patch('/profile', [AgencyProfileController::class, 'update']);
     Route::get('/home', [AgencyHomeController::class, 'index'])->name('home');
     Route::get('/cars', [AgencyCarController::class, 'index'])->name('cars');
     Route::get('/cars/create', [AgencyCarController::class, 'getTypes'])->name('cars.getTypes');

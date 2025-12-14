@@ -40,7 +40,7 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:255',
             'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-            'contact_email' => 'required|email|string|max:255',
+            // 'contact_email' => 'required|email|string|max:255',
             'commercial_register' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
         ]);
 
@@ -60,10 +60,11 @@ class ProfileController extends Controller
             'profile_photo_path' => $validated['photo'] ?? null,
         ]);
 
-        $agency->update([
-            'contact_email' => $validated['contact_email'],
-            'commercial_register' => $validated['commercial_register'] ?? null,
-        ]);
+        if (isset($validated['commercial_register'])) {
+            $agency->update([
+                'commercial_register' => $validated['commercial_register'],
+            ]);
+        }
 
         return response()->json([
             'success' => true,

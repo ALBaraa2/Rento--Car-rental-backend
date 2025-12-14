@@ -15,6 +15,7 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        if ($this->role == 'agency') {
             return [
                 'id' => $this->id,
                 'name' => $this->name,
@@ -25,7 +26,23 @@ class UserResource extends JsonResource
                 'is_approved' => $this->is_approved,
                 'profile_photo_path' => $this->profile_photo_path,
                 'address' => $this->address,
-                'driving_license' => $this->driving_license ? asset('storage/' . $this->driving_license) : null,
+                'commercial_register' => $this->agency->commercial_register ? asset('storage/' . $this->agency->commercial_register) : null,
+                'commercial_register_number' => $this->agency->commercial_register_number,
             ];
+        } elseif ($this->role == 'customer') {
+            return [
+                'id' => $this->id,
+                'name' => $this->name,
+                'email' => $this->email,
+                'phone' => $this->phone,
+                'role' => $this->role,
+                'is_active' => $this->is_active,
+                'is_approved' => $this->is_approved,
+                'profile_photo_path' => $this->profile_photo_path,
+                'address' => $this->address,
+                'driving_license' => $this->customer->driving_license ? asset('storage/' . $this->customer->driving_license) : null,
+            ];
+        }
+        return [];
     }
 }

@@ -68,7 +68,7 @@ class AuthController extends Controller
             'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'address' => ['nullable', 'string', 'max:255'],
             'commercial_register' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
-            'contact_email' => ['nullable', 'email', 'max:255'],
+            'commercial_register_number' => ['nullable', 'decimal:10,2'],
         ]);
 
         if ($request->hasFile('commercial_register')) {
@@ -95,7 +95,7 @@ class AuthController extends Controller
         Agency::create([
             'user_id' => $user->id,
             'commercial_register' => $validated['commercial_register'] ?? null,
-            'contact_email' => $validated['contact_email'] ?? null,
+            'commercial_register_number' => $validated['commercial_register_number'] ?? null,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
