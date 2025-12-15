@@ -68,6 +68,10 @@ class ProfileController extends Controller
             $agency->update([
                 'commercial_register' => $validated['commercial_register'],
             ]);
+
+            $agency->user->update([
+                'is_approved' => false,
+            ]);
         }
 
         return response()->json([

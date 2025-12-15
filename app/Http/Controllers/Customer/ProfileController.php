@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
-{ 
+{
     public function profile()
     {
         $user = Auth::user();
@@ -26,7 +26,11 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        $customer = Customer::with('user')->where('user_id', $user->id)->firstOrFail();
+        $customer = Customer::with('user')->where('user_id', $user->id)->first();
+
+        if (!$customer || $user->role != 'customer') {
+            return response()->json(['mesasge' => 'unauthorized']);
+        }
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -47,11 +51,19 @@ class ProfileController extends Controller
         $customer->user->update([
             'name' => $validated['name'],
             'phone' => $validated['phone'],
+            'profile_photo_path' => $validated['photo'],
         ]);
 
-        $customer->update([
-            'driving_license' => $request->driving_license ? $validated['driving_license'] : $customer->driving_license,
-        ]);
+        if (isset($validated['driving_license'])) {
+            $customer->update([
+                'driving_license' => $request->driving_license ? $validated['driving_license'] : $customer->driving_license,
+            ]);
+
+            $customer->user->update([
+                'is_approved' => false,
+            ]);
+        }
+
 
         return response()->json([
             'success' => true,
