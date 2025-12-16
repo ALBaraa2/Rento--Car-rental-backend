@@ -22,7 +22,10 @@ class CarController extends Controller
             return response()->json(['mesasge' => 'unauthorized']);
         }
 
-        $cars = $agency->cars()->with(['model.brand'])->get();
+        $cars = $agency->cars()
+            ->with(['model.brand'])
+            ->withAvg('reviews as reviews_avg_rating', 'rating')
+            ->get();
 
         if ($cars->count() == 0) {
             return response()->json(['message'=> 'No cars found']);
