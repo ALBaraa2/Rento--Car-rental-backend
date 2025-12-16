@@ -68,7 +68,7 @@ class AuthController extends Controller
             'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'address' => ['nullable', 'string', 'max:255'],
             'commercial_register' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
-            'commercial_register_number' => ['nullable', 'decimal:10,2'],
+            'commercial_register_number' => ['nullable', 'string'],
         ]);
 
         if ($request->hasFile('commercial_register')) {
