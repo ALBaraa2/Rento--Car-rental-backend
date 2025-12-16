@@ -51,8 +51,13 @@ class ProfileController extends Controller
         $customer->user->update([
             'name' => $validated['name'],
             'phone' => $validated['phone'],
-            'profile_photo_path' => $validated['photo'],
         ]);
+
+        if (isset($validated['photo'])) {
+            $customer->user->update([
+                'profile_photo_path' => $request->photo ? $validated['photo'] : $customer->profile_photo_path,
+            ]);
+        }
 
         if (isset($validated['driving_license'])) {
             $customer->update([

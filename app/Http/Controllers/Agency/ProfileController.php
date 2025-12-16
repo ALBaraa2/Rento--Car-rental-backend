@@ -57,12 +57,17 @@ class ProfileController extends Controller
         $agency->user->update([
             'name' => $validated['name'],
             'phone' => $validated['phone'],
-            'profile_photo_path' => $validated['photo'] ?? null,
         ]);
 
         $agency->update([
             'commercial_register_number' => $validated['commercial_register_number'],
         ]);
+
+        if (isset($validated['photo'])) {
+            $agency->user->update([
+                'profile_photo_path' => $request->photo ? $validated['photo'] : $agency->profile_photo_path,
+            ]);
+        }
 
         if (isset($validated['commercial_register'])) {
             $agency->update([
