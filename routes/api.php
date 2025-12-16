@@ -12,6 +12,7 @@ use App\Http\Controllers\Agency\ProfileController as AgencyProfileController;
 use App\Http\Resources\AgencyResource;
 use App\Http\Controllers\Agency\HomeController as AgencyHomeController;
 use App\Http\Controllers\Agency\CarController as AgencyCarController;
+use App\Http\Controllers\Agency\BookingController as AgencyBookingController;
 use Illuminate\Support\Facades\Auth;
 
 // Test API
@@ -73,4 +74,6 @@ Route::prefix('agency')->middleware('auth:sanctum')->name('agency.')->group(func
     Route::get('/cars/getColor', [AgencyCarController::class, 'getColor'])->name('cars.getColor');
     Route::get('/cars/getFuelType', [AgencyCarController::class, 'getFuelType'])->name('cars.getFuelType');
     Route::post('/cars/store', [AgencyCarController::class,'store'])->name('cars.store');
+    Route::get('/bookings', [AgencyBookingController::class,'allBookings'])->name('allBookings');
+    Route::get('/bookings/{date}', [AgencyBookingController::class,'bookingsByDate'])->name('bookingsByDate');
 });

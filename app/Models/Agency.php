@@ -26,6 +26,14 @@ class Agency extends Model
         return $this->hasMany(Car::class);
     }
 
+    public function bookings()
+    {
+        return $this->hasManyThrough(
+            Booking::class,
+            Car::class
+        );
+    }
+
     public function isActive(): bool
     {
         return $this->user->is_active;

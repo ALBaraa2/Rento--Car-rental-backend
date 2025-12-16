@@ -41,7 +41,7 @@ class ProfileController extends Controller
             'phone' => 'required|string|max:255',
             'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'commercial_register' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
-            'commercial_register_number' => 'required|string|max:255',
+            'commercial_register_number' => 'nullable|string|max:255',
         ]);
 
         if ($request->hasFile('photo')) {
