@@ -172,6 +172,7 @@ class CarController extends Controller
 
         return response()->json([
             'success' => true,
+            'car' => $car,
             'message' => 'Car created successfully',
         ]);
     }
