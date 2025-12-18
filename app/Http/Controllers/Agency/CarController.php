@@ -119,6 +119,14 @@ class CarController extends Controller
         ]);
     }
 
+    public function getStatus()
+    {
+        return response()->json([
+            'success'=> true,
+            'status' => ['available', 'maintenance'],
+        ]);
+    }
+
     public function store(Request $request)
     {
 
@@ -130,16 +138,15 @@ class CarController extends Controller
         }
 
         $validated = $request->validate([
-            'type' => 'required|in:باص,سيارة,دراجة نارية',
             'model_id' => 'required|exists:models,id',
-            'registration_number' => 'required|string|max:255',
-            'price_per_hour' => 'required|numeric',
+            'registration_number' => 'nullable|string|max:255',
+            'price_per_hour' => 'nullable|numeric',
             'status' => 'required|string|in:available,maintenance',
-            'color' => 'required|string',
-            'fuel_type' => 'required|string',
-            'seats' => 'required|string',
-            'doors' => 'required|string',
-            'transmission' => 'required|string',
+            'color' => 'nullable|string',
+            'fuel_type' => 'nullable|string',
+            'seats' => 'nullable|string',
+            'doors' => 'nullable|string',
+            'transmission' => 'nullable|string',
             'description' => 'nullable|string',
             'images' => 'nullable|array',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
