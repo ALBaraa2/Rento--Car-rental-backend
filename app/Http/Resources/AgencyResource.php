@@ -23,6 +23,7 @@ class AgencyResource extends JsonResource
                 'commercial_register' => $this->commercial_register,
                 'profile_image' => $this->user->profile_photo_path ? asset('storage/' . $this->user->profile_photo_path) : null,
                 'commercial_register_number' => $this->commercial_register_number,
+                'address' => $this->user->address,
             ];
         } else if ($this->user->role == 'customer') {
             return [
