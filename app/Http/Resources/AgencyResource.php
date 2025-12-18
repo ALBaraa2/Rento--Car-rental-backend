@@ -17,7 +17,7 @@ class AgencyResource extends JsonResource
         if ($this->user->role == 'agency') {
             return [
                 'user_id' => $this->user_id,
-                'agency_name' => $this->user->name,
+                'name' => $this->user->name,
                 'email' => $this->user->email,
                 'phone' => $this->user->phone,
                 'commercial_register' => $this->commercial_register,
