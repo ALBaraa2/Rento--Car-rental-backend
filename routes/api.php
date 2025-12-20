@@ -65,6 +65,7 @@ Route::prefix('agency')->middleware('auth:sanctum')->name('agency.')->group(func
             return response()->json(['message' => 'unauthorized']);
     })->name('show.profile.update');
     Route::patch('/profile', [AgencyProfileController::class, 'update']);
+    Route::patch('/profile/updatePhoto', [AgencyProfileController::class, 'updatePhoto'])->name('updatePhoto');
     Route::get('/home', [AgencyHomeController::class, 'index'])->name('home');
     Route::get('/cars', [AgencyCarController::class, 'index'])->name('cars');
     Route::get('/cars/create', [AgencyCarController::class, 'getTypes'])->name('cars.getTypes');
