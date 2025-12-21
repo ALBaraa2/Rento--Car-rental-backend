@@ -24,7 +24,7 @@ class UserResource extends JsonResource
                 'role' => $this->role,
                 'is_active' => $this->is_active,
                 'is_approved' => $this->is_approved,
-                'profile_photo_path' => $this->profile_photo_path ? asset('storage/' . $this->profile_photo_path) : null,
+                'profile_image' => $this->profile_photo_path ? asset('storage/' . $this->profile_photo_path) : null,
                 'address' => $this->address,
                 'commercial_register' => $this->agency->commercial_register ? asset('storage/' . $this->agency->commercial_register) : null,
                 'commercial_register_number' => $this->agency->commercial_register_number,
@@ -38,7 +38,7 @@ class UserResource extends JsonResource
                 'role' => $this->role,
                 'is_active' => $this->is_active,
                 'is_approved' => $this->is_approved,
-                'profile_photo_path' => $this->profile_photo_path ? asset('storage/' . $this->profile_photo_path) : null,
+                'profile_image' => $this->profile_photo_path ? asset('storage/' . $this->profile_photo_path) : null,
                 'address' => $this->address,
                 'driving_license' => $this->customer->driving_license ? asset('storage/' . $this->customer->driving_license) : null,
             ];
