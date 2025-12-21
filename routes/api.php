@@ -68,6 +68,7 @@ Route::prefix('agency')->middleware('auth:sanctum')->name('agency.')->group(func
     Route::patch('/profile/updatePhoto', [AgencyProfileController::class, 'updatePhoto'])->name('updatePhoto');
     Route::get('/home', [AgencyHomeController::class, 'index'])->name('home');
     Route::get('/cars', [AgencyCarController::class, 'index'])->name('cars');
+    Route::get('/cars/search', [AgencyCarController::class, 'search'])->name('cars.search');
     Route::get('/cars/create', [AgencyCarController::class, 'getTypes'])->name('cars.getTypes');
     Route::get('/cars/get/{type}', [AgencyCarController::class, 'getBrandName'])->name('cars.get.brandsName');
     Route::get('/cars/get/{type}/{brandId}', [AgencyCarController::class, 'getModels'])->name('cars.get.models');

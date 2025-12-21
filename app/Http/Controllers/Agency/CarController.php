@@ -38,6 +38,53 @@ class CarController extends Controller
         ]);
     }
 
+    public function search(Request $request)
+    {
+        $brand = $request->input('brand');
+        $model = $request->input('model');
+        $rating = $request->input('rating');
+
+        $agency = Auth::user()->agency;
+
+        if (!$agency) {
+            return response()->json(['message' => 'Agency not found'], 404);
+        }
+
+        $query = $agency->cars()->with(['model.brand']);
+
+        if ($brand) {
+            $query->whereHas('model.brand', function ($q) use ($brand) {
+                $q->where('name', 'ilike', "%{$brand}%");
+            });
+        }
+
+        if ($model) {
+            $query->whereHas('model', function ($q) use ($model) {
+                $q->where('name', 'ilike', "%{$model}%");
+            });
+        }
+
+        if ($rating) {
+            $query->when($rating, function ($query) use ($rating) {
+                $query->whereRaw('(select avg(rating) from reviews where reviews.car_id = cars.id) >= ?', [$rating]);
+            });
+        } else {
+            $query->withAvg('reviews as reviews_avg_rating', 'rating');
+        }
+
+        $cars = $query->get();
+
+        if ($cars->isEmpty()) {
+            return response()->json(['message' => 'No cars found'], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'count' => $cars->count(),
+            'cars' => $cars,
+        ]);
+    }
+
     public function getTypes()
     {
         return response()->json([
