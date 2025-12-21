@@ -154,7 +154,6 @@ class CarController extends Controller
 
         $car = Car::create([
             'agency_id' => $request->user()->agency->id,
-            'type' => $validated['type'],
             'model_id' => $validated['model_id'],
             'registration_number' => $validated['registration_number'],
             'price_per_hour' => $validated['price_per_hour'],
