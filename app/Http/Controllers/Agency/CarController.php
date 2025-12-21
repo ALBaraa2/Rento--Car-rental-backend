@@ -229,4 +229,30 @@ class CarController extends Controller
             'message' => 'Car created successfully',
         ]);
     }
+
+    public function softdelete(string $id)
+    {
+        $car = Car::with(['bookings', 'agency'])->findOrFail($id);
+
+        if ($car->agency_id !== Auth::user()->agency->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not authorized to delete this car',
+            ], 403);
+        }
+
+        if ($car->bookings->count() > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Car has active bookings, cannot be deleted',
+            ]);
+        }
+
+        $car->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Car deleted successfully',
+        ]);
+    }
 }
