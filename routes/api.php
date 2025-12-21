@@ -79,6 +79,7 @@ Route::prefix('agency')->middleware('auth:sanctum')->name('agency.')->group(func
     Route::get('/cars/getStatus', [AgencyCarController::class, 'getStatus'])->name('cars.getStatus');
     Route::post('/cars/store', [AgencyCarController::class,'store'])->name('cars.store');
     Route::delete('/cars/{id}', [AgencyCarController::class,'softdelete'])->name('car.delete');
+    Route::get('/cars/{id}', [AgencyCarController::class,'show'])->name('car.show');
     Route::get('/bookings', [AgencyBookingController::class,'allBookings'])->name('allBookings');
     Route::get('/bookings/{date}', [AgencyBookingController::class,'bookingsByDate'])->name('bookingsByDate');
 });

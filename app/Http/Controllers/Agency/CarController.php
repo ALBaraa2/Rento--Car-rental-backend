@@ -255,4 +255,36 @@ class CarController extends Controller
             'message' => 'Car deleted successfully',
         ]);
     }
+
+    public function show(string $id)
+    {
+        $car = Car::with([
+            'model.brand',
+            'agency'
+        ])->findOrFail($id);
+
+        if ($car->agency_id !== Auth::user()->agency->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized',
+            ], 403);
+        }
+
+        return response()->json([
+            'success' => true,
+            'car' => [
+                'id' => $car->id,
+                'brand' => $car->model->brand->name ?? null,
+                'model' => $car->model->name ?? null,
+                'year' => $car->model->year,
+                'price_per_hour' => $car->price_per_hour,
+                'color' => $car->color,
+                'fuel_type' => $car->fuel_type,
+                'transmission' => $car->transmission,
+                'seats' => $car->seats,
+                'status' => $car->status,
+                'description' => $car->description,
+            ],
+        ]);
+    }
 }
