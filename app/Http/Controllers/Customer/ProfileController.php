@@ -75,4 +75,25 @@ class ProfileController extends Controller
             'user' => new CustomerResource($customer)
         ]);
     }
+
+    public function updatePhoto(Request $request)
+    {
+        $customer = Auth::user()->customer;
+
+        $validated = $request->validate([
+            'photo' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+        ]);
+
+        $path = $request->file('photo')->store('profile_photos', 'public');
+        $validated['photo'] = $path;
+
+        $customer->user->update([
+            'profile_photo_path' => $validated['photo'],
+        ]);
+
+        return response()->json([
+            'success'=> true,
+            'customer'=> new CustomerResource($customer),
+        ]);
+    }
 }

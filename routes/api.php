@@ -41,6 +41,7 @@ Route::prefix('customer')->middleware('auth:sanctum')->name('customer.')->group(
         ]);
     })->name('show.profile.update');
     Route::patch('/profile', [CustomerProfileController::class, 'update']);
+    Route::patch('/profile/updatePhoto', [CustomerProfileController::class, 'updatePhoto'])->name('updatePhoto');
     Route::get('/home', [CustomerHomeController::class, 'index'])->name('home');
     Route::get('/home/search', [CustomerHomeController::class, 'search'])->name('home.search');
     Route::get('agencies/search', [CustomerAgenciesController::class, 'search'])->name('agencies.search');
