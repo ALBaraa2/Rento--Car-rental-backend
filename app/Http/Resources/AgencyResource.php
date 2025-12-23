@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class AgencyResource extends JsonResource
 {
@@ -14,7 +15,8 @@ class AgencyResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        if ($this->user->role == 'agency') {
+        $user = Auth::user();
+        if ($user->role == 'agency') {
             return [
                 'user_id' => $this->user_id,
                 'name' => $this->user->name,
@@ -25,9 +27,10 @@ class AgencyResource extends JsonResource
                 'commercial_register_number' => $this->commercial_register_number,
                 'address' => $this->user->address,
             ];
-        } else if ($this->user->role == 'customer') {
+        } else if ($user->role == 'customer') {
             return [
                 'id' => $this->id,
+                'user_id' => $this->user_id,
                 'agency_name' => $this->user->name,
                 'contact_email' => $this->contact_email,
                 'phone' => $this->user->phone,
