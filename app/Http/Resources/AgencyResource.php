@@ -18,7 +18,7 @@ class AgencyResource extends JsonResource
         $user = Auth::user();
         if ($user->role == 'agency') {
             return [
-                'user_id' => $this->user_id,
+                'id'=> $user->id,
                 'name' => $this->user->name,
                 'email' => $this->user->email,
                 'phone' => $this->user->phone,
@@ -30,7 +30,6 @@ class AgencyResource extends JsonResource
         } else if ($user->role == 'customer') {
             return [
                 'id' => $this->id,
-                'user_id' => $this->user_id,
                 'agency_name' => $this->user->name,
                 'contact_email' => $this->contact_email,
                 'phone' => $this->user->phone,
