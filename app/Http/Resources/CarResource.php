@@ -23,30 +23,30 @@ class CarResource extends JsonResource
             if (is_string($images)) {
                 $images = json_decode($images, true);
             }
+
+            $isDetails = $request->routeIs('customer.car.details');
+
             return [
                 'id' => $this->id,
                 'agency_id' => $this->agency_id,
                 'model_name' => $this->model->name,
-                'model_year' => $this->model->year,
-                'type' => $this->model->type,
-                'color' => $this->model->color,
-                'fuel_type' => $this->model->fuel_type,
-                'seats' => $this->model->seats,
-                'doors' => $this->model->doors,
-                'transmission' => $this->model->transmission,
                 'brand' => $this->model->brand->name,
+                'model_year' => $this->model->year,
+                'type' => $this->model->brand->type,
+                'color' => $this->color,
+                'fuel_type' => $this->fuel_type,
+                'seats' => $this->seats,
+                'doors' => $this->doors,
+                'transmission' => $this->transmission,
                 'price_per_hour' => $this->price_per_hour,
                 'status' => $this->status,
                 'description' => $this->description,
                 'is_featured' => $this->is_featured,
-                'rating' => round($this->reviews_avg_rating, 2),
+                'rating' => $this->reviews_avg_rating ? round($this->reviews_avg_rating, 2) : null,
                 'reviews_count' => $this->reviews_count,
-                'images' => $this->images_paths
-                ? array_map(
-                    fn ($image) => asset('storage/' . $image),
-                    $images
-                )
-                : [],
+                'images' => $isDetails
+                    ? array_map(fn ($img) => asset('storage/' . $img), $images ?? [])
+                    : (isset($images[0]) ? asset('storage/' . $images[0]) : null),
             ];
         }
         return [];

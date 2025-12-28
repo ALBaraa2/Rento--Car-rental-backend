@@ -28,18 +28,7 @@ class CarsController extends Controller
             'agency_name' => $agency->user->name,
             'agency_id' => $agency->id,
             'agency_adderss' => $agency->user->address,
-            'agencyCars' => $agencyCars->map(function ($car) {
-
-                $firstImage = $car->images_paths[0] ?? null;
-                return [
-                    'id' => $car->id,
-                    'brand' => $car->model->brand->name ?? null,
-                    'model' => $car->model->name ?? null,
-                    'price_per_hour' => $car->price_per_hour,
-                    'reviews_avg_rating' => $car->reviews_avg_rating ? round($car->reviews_avg_rating, 2) : null,
-                    'car_image' => $firstImage? asset('storage/' . $firstImage) : null,
-                ];
-            }),
+            'cars' => CarResource::collection($agencyCars),
         ]);
     }
 
