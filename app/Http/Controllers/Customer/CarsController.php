@@ -45,7 +45,7 @@ class CarsController extends Controller
 
     public function show(string $id)
     {
-        $car = Car::with(['bookings', 'reviews'])->where('id', $id)->withAvg('reviews', 'rating')->withCount('reviews')->get();
+        $car = Car::with(['bookings', 'reviews'])->where('id', $id)->withAvg('reviews', 'rating')->withCount('reviews')->first();
 
         if (!$car) {
             return response()->json(['message' => 'Car not found'], 404);
@@ -53,7 +53,7 @@ class CarsController extends Controller
 
         return response()->json([
             'success' => true,
-            'car' => CarResource::collection($car),
+            'car' => new CarResource($car),
         ]);
     }
 
