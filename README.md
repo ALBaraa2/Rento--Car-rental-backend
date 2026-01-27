@@ -1,63 +1,98 @@
-<<<<<<< HEAD
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Rento - Vehicle Rental System (Backend API)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Rento is a comprehensive vehicle rental platform built with **Laravel**. It provides a robust API to manage two types of users: **Customers** (who want to rent cars) and **Agencies** (who manage their fleet and bookings).
 
-## About Laravel
+## 🚀 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 🔐 Authentication & Authorization
+* **Multi-Role Auth**: Separate registration flows for Customers and Agencies.
+* **Sanctum Integration**: Secure token-based authentication.
+* **Profile Management**: Update personal info and profile photos for both roles.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 👤 Customer Features
+* **Browse & Search**: Find agencies and cars with advanced search filters.
+* **Booking Flow**: Seamless car booking process from selection to confirmation.
+* **Agency Discovery**: Explore different rental agencies and their specific fleets.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🏢 Agency Features
+* **Fleet Management**: Full CRUD operations for cars, including soft deletes.
+* **Dynamic Car Attributes**: Fetch predefined types, brands, models, fuel types, and transmissions.
+* **Booking Management**: Monitor all incoming bookings or filter them by date.
+* **Statistics**: Home dashboard for agency-specific insights.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🛠 Tech Stack
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* **Framework:** Laravel 10+
+* **Authentication:** Laravel Sanctum
+* **Database:** MySQL / PostgreSQL
+* **Architecture:** RESTful API with API Resources for consistent JSON responses.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🛣 API Endpoints (Quick Reference)
 
-### Premium Partners
+### 1. Authentication
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| POST | `/api/register/customer` | Register a new customer |
+| POST | `/api/register/agency` | Register a new rental agency |
+| POST | `/api/login` | Login and get Bearer Token |
+| POST | `/api/logout` | Revoke token (Auth required) |
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2. Customer Portal (`/api/customer/*`)
+* `GET /home`: Get featured cars/agencies.
+* `GET /agencies`: List all agencies.
+* `GET /cars/{id}`: View specific car details.
+* `POST /cars/{id}/book`: Request a booking.
+* `POST /cars/book/confirm/{id}`: Finalize booking.
 
-## Contributing
+### 3. Agency Portal (`/api/agency/*`)
+* `GET /cars`: View agency fleet.
+* `POST /cars/store`: Add a new car to the system.
+* `GET /bookings/{date}`: Check schedule for a specific day.
+* `DELETE /cars/{id}`: Remove a car (Soft Delete).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## ⚙️ Installation & Setup
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1.  **Clone the repository**
+    ```bash
+    git clone [https://github.com/your-username/rento-backend.git](https://github.com/your-username/rento-backend.git)
+    cd rento-backend
+    ```
 
-## Security Vulnerabilities
+2.  **Install dependencies**
+    ```bash
+    composer install
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3.  **Environment Setup**
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
+    *Configure your database settings in the `.env` file.*
 
-## License
+4.  **Run Migrations & Seeders**
+    ```bash
+    php artisan migrate --seed
+    ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-=======
-# Rento---Car-rental-backend
->>>>>>> f7776a99e4e6a7f3fae5c8574acd97e9d61065d6
+5.  **Start the Server**
+    ```bash
+    php artisan serve
+    ```
+
+---
+
+## 📱 Frontend Integration
+The frontend for this project is built using **Flutter**. You can find the mobile application repository here:
+👉 [Rento Flutter App](https://github.com/SamerZaina/Vehicle_Rental_App.git)
+
+---
+
+## 🤝 Contributors
+**[Samer Zaina](https://github.com/SamerZaina)** & **[Roaaa Khalad](https://github.com/roaaabufoul)**.
