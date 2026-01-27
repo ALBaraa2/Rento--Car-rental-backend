@@ -1,4 +1,4 @@
-# Rento - Vehicle Rental System (Backend API)
+# Rento - Vehicle Rental App (Backend API)
 
 Rento is a comprehensive vehicle rental platform built with **Laravel**. It provides a robust API to manage two types of users: **Customers** (who want to rent cars) and **Agencies** (who manage their fleet and bookings).
 
