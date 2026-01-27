@@ -24,9 +24,9 @@ Rento is a comprehensive vehicle rental platform built with **Laravel**. It prov
 
 ## 🛠 Tech Stack
 
-* **Framework:** Laravel 10+
+* **Framework:** Laravel 12
 * **Authentication:** Laravel Sanctum
-* **Database:** MySQL / PostgreSQL
+* **Database:** PostgreSQL
 * **Architecture:** RESTful API with API Resources for consistent JSON responses.
 
 ---
