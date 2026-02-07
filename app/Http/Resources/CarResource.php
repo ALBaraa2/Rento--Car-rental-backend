@@ -25,6 +25,7 @@ class CarResource extends JsonResource
             }
 
             $isDetails = $request->routeIs('customer.car.details');
+            $imageKey = $isDetails ? 'images' : 'image';
 
             return [
                 'id' => $this->id,
@@ -46,7 +47,7 @@ class CarResource extends JsonResource
                 'is_featured' => $this->is_featured,
                 'rating' => $this->reviews_avg_rating ? round($this->reviews_avg_rating, 2) : null,
                 'reviews_count' => $this->reviews_count,
-                'images' => $isDetails
+                $imageKey => $isDetails
                     ? array_map(fn ($img) => asset('storage/' . $img), $images ?? [])
                     : (isset($images[0]) ? asset('storage/' . $images[0]) : null),
             ];
