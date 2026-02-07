@@ -40,7 +40,7 @@ class HomeController extends Controller
         $max_price = $request->input('max_price');
         $rating = $request->input('rating');
 
-        $cars = Car::with(['agency.user', 'model.brand', 'reviews'])->Available()->withAvg('reviews as avarage_rating', 'rating')
+        $cars = Car::with(['agency.user', 'model.brand', 'reviews'])->Available()->withAvg('reviews as reviews_avg_rating', 'rating')
             ->when($model, function ($query) use ($model) {
                 $query->whereHas('model', function ($q) use ($model) {
                     $q->where('name', 'ilike', '%' . $model . '%');
@@ -52,7 +52,7 @@ class HomeController extends Controller
                 });
             })
             ->when($type, function ($query) use ($type) {
-                $query->whereHas('model', function ($q) use ($type) {
+                $query->whereHas('model.brand', function ($q) use ($type) {
                     $q->where('type', 'ilike', '%' . $type . '%');
                 });
             })
@@ -65,12 +65,13 @@ class HomeController extends Controller
             ->when($max_price, function ($query) use ($max_price) {
                 $query->where('price_per_hour', '<=', $max_price);
             })
+            ->withCount('reviews as reviews_count')
             ->get();
 
         return response()->json([
             'success' => true,
             'count' => $cars->count(),
-            'cars' => $cars
+            'cars' => CarResource::collection($cars)
         ]);
     }
 }
