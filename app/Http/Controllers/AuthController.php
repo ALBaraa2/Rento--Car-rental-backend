@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AgencyRequest;
 use App\Models\User;
 use App\Models\Customer;
 use App\Models\Agency;
@@ -14,15 +15,7 @@ class AuthController extends Controller
 {
     public function registerCustomer(Request $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'phone' => ['nullable', 'string', 'max:20'],
-            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-            'address' => ['nullable', 'string', 'max:255'],
-            'driving_license' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
-        ]);
+        $validated = $request->validate();
 
         if ($request->hasFile('photo')) {
             $path = $request->file('photo')->store('profile_photos', 'public');
@@ -58,18 +51,9 @@ class AuthController extends Controller
         ->response()->setStatusCode(201);
     }
 
-    public function registerAgency(Request $request)
+    public function registerAgency(AgencyRequest $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'phone' => ['nullable', 'string', 'max:20'],
-            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-            'address' => ['nullable', 'string', 'max:255'],
-            'commercial_register' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
-            'commercial_register_number' => ['nullable', 'string'],
-        ]);
+        $validated = $request->validate();
 
         if ($request->hasFile('commercial_register')) {
             $path = $request->file('commercial_register')->store('commercial_registers', 'public');

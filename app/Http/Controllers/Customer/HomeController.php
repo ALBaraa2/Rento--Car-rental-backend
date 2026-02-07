@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CarResource;
 use App\Models\Agency;
 use Illuminate\Http\Request;
 use App\Models\Car;
@@ -20,8 +21,8 @@ class HomeController extends Controller
 
         return response()->json([
             'success' => true,
-            'featuredCars' => $featuredCars,
-            'bestCars' => $bestCars,
+            'featuredCars' => CarResource::collection($featuredCars),
+            'bestCars' => CarResource::collection($bestCars),
             'mostBookedBrands' => $mostBookedBrands,
         ]);
     }
