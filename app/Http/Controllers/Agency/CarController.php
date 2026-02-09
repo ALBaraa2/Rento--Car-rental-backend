@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Agency;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CarRequest;
+use App\Http\Resources\CarResource;
 use App\Models\Agency;
 use App\Models\Brands;
 use App\Models\Car;
@@ -285,6 +287,53 @@ class CarController extends Controller
                 'status' => $car->status,
                 'description' => $car->description,
             ],
+        ]);
+    }
+
+    public function update(CarRequest $request, string $id)
+    {
+        $car = Car::find($id);
+
+        if (!$car || $car->agency_id !== Auth::user()->agency->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You are not authorized to update this car',
+            ], 403);
+        }
+
+        $car->update($request->validated());
+
+        if ($request->hasFile('images')) {
+            $existing = $car->images_paths;
+
+            // Fix: If it's a string, it's double-encoded. Decode it.
+            // If it's null, start a fresh array.
+            if (is_string($existing)) {
+                $existing = json_decode($existing, true) ?? [];
+            } elseif (!is_array($existing)) {
+                $existing = [];
+            }
+
+            $images = [];
+
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('cars', 'public');
+                $images[] = $path;
+            }
+
+            $merged = array_merge($existing, $images);
+            $car->images_paths = $merged;
+            $car->save();
+        }
+
+        $car->loadAvg('reviews', 'rating')
+            ->loadCount('reviews')
+            ->load(['model.brand']);
+
+        return response()->json([
+            'success' => true,
+            'car' => new CarResource($car),
+            'message' => 'Car updated successfully',
         ]);
     }
 }
