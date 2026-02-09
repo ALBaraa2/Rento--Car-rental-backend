@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 class Car extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $fillable = [
         'agency_id',
         'model_id',
@@ -90,10 +91,9 @@ class Car extends Model
 
     public function scopeBestRated($query): Builder
     {
-        return $query->confirmedBooking()->reviewsCount()
-                    ->whereHas('reviews')
-                    ->withAvg('reviews as average_rating', 'rating')
-                    ->orderByDesc('average_rating');
+        return $query->withAvg('reviews as reviews_avg_rating', 'rating')
+                ->withCount('reviews as reviews_count')
+                ->orderBy('reviews_avg_rating', 'asc');
     }
 
     public function scopeReviewsCount($query): Builder

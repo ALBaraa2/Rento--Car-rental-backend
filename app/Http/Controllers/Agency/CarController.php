@@ -232,9 +232,9 @@ class CarController extends Controller
 
     public function softdelete(string $id)
     {
-        $car = Car::with(['bookings', 'agency'])->findOrFail($id);
+        $car = Car::with(['bookings', 'agency'])->find($id);
 
-        if ($car->agency_id !== Auth::user()->agency->id) {
+        if (!$car || $car->agency_id !== Auth::user()->agency->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'You are not authorized to delete this car',

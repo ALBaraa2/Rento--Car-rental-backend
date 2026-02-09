@@ -19,8 +19,12 @@ class HomeController extends Controller
                                 ->where('is_featured', true)
                                 ->withAvg('reviews as reviews_avg_rating', 'rating')
                                 ->withCount('reviews as reviews_count')
+                                ->orderBy('reviews_avg_rating', 'asc')
                                 ->get();
-        $bestCars = Car::with(['agency.user'])->bestRated()->take(5)->get();
+        $bestCars = Car::with(['agency.user'])
+                            ->bestRated()
+                            ->take(5)
+                            ->get();
         $mostBookedBrands = Car::with('model.brand')->mostBookedBrandName();
 
         return response()->json([
