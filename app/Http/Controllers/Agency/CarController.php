@@ -306,8 +306,6 @@ class CarController extends Controller
         if ($request->hasFile('images')) {
             $existing = $car->images_paths;
 
-            // Fix: If it's a string, it's double-encoded. Decode it.
-            // If it's null, start a fresh array.
             if (is_string($existing)) {
                 $existing = json_decode($existing, true) ?? [];
             } elseif (!is_array($existing)) {

@@ -37,22 +37,25 @@ class HomeController extends Controller
 
     public function search(Request $request)
     {
-        $model = $request->input('model');
-        $brand = $request->input('brand');
+
+        $keyword = $request->input('search');
         $type = $request->input('type');
         $min_price = $request->input('min_price');
         $max_price = $request->input('max_price');
         $rating = $request->input('rating');
 
-        $cars = Car::with(['agency.user', 'model.brand', 'reviews'])->Available()->withAvg('reviews as reviews_avg_rating', 'rating')
-            ->when($model, function ($query) use ($model) {
-                $query->whereHas('model', function ($q) use ($model) {
-                    $q->where('name', 'ilike', '%' . $model . '%');
-                });
-            })
-            ->when($brand, function ($query) use ($brand) {
-                $query->whereHas('model.brand', function ($q) use ($brand) {
-                    $q->where('name', 'ilike', '%' . $brand . '%');
+        $cars = Car::with(['agency.user', 'model.brand', 'reviews'])->Available()
+            ->withAvg('reviews as reviews_avg_rating', 'rating')
+
+            ->when($keyword, function ($query) use ($keyword) {
+                $query->where(function ($group) use ($keyword) {
+                    $group->whereHas('model', function ($q) use ($keyword) {
+                        $q->where('name', 'ilike', '%' . $keyword . '%');
+                    })
+
+                    ->orWhereHas('model.brand', function ($q) use ($keyword) {
+                        $q->where('name', 'ilike', '%' . $keyword . '%');
+                    });
                 });
             })
             ->when($type, function ($query) use ($type) {
